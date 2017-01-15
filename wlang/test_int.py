@@ -24,6 +24,7 @@ import unittest
 import wlang.ast as ast
 import wlang.int
 
+
 class TestInt (unittest.TestCase):
     def test_one (self):
         prg1 = "x := 10; print_state"
@@ -39,5 +40,15 @@ class TestInt (unittest.TestCase):
         self.assertEquals (st.env['x'], 10)
         # no other variables in the state
         self.assertEquals (len (st.env), 1)
+
+    def test_methods(self):
+        print("test2")
+        with open('./wlang/additional_test.prg', 'r') as f:
+            prg = f.read()
+        # test parser
+        ast1 = ast.parse_string(prg)
+        interp = wlang.int.Interpreter()
+        st = wlang.int.State()
+        st = interp.run(ast1, st)
         
         

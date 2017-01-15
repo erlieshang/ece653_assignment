@@ -80,11 +80,12 @@ class IfStmt (Stmt):
             self.then_stmt == other.then_stmt and \
             self.else_stmt == other.else_stmt
 
+
 class WhileStmt (Stmt):
     """While statement"""
     def __init__(self, cond, body):
         self.cond = cond
-        slef.body = body
+        self.body = body
         
     def __eq__ (self, other):
         return type(self) == type(other) and \

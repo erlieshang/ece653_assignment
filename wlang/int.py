@@ -68,7 +68,7 @@ class Interpreter(wlang.ast.AstVisitor):
         assert False
 
     def visit_BExp (self, node, *args, **kwargs):
-        kids = [self.visit (a, *args, **kwargs) for a in self.args]
+        kids = [self.visit (a, *args, **kwargs) for a in args]
         
         if node.op == 'not':
             assert node.is_unary ()

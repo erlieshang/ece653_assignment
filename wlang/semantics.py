@@ -63,7 +63,7 @@ class WlangSemantics (object):
             val = True
         else:
             val = False
-        return wlang.BoolConst (val)
+        return wlang.ast.BoolConst (val)
         
     def bexp (self, ast, *args, **kwargs):
         return self.bterm (ast, args, kwargs)
