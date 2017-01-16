@@ -24,7 +24,6 @@ import unittest
 import wlang.ast as ast
 import wlang.int
 
-
 class TestInt (unittest.TestCase):
     def test_one (self):
         prg1 = "x := 10; print_state"

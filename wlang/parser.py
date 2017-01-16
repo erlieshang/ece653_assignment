@@ -205,6 +205,11 @@ class WhileLangParser(Parser):
     def _havoc_stmt_(self):
         self._token('havoc')
         self._var_list_()
+        self.name_last_node('vars')
+        self.ast._define(
+            ['vars'],
+            []
+        )
 
     @graken()
     def _var_list_(self):
@@ -322,47 +327,79 @@ class WhileLangParser(Parser):
 
     @graken()
     def _aexp_(self):
+        with self._choice():
+            with self._option():
+                self._addition_()
+            with self._option():
+                self._subtraction_()
+            with self._option():
+                self._term_()
+            self._error('no available options')
 
-        def sep0():
-            with self._group():
-                with self._choice():
-                    with self._option():
-                        self._token('+')
-                        self.name_last_node('op')
-                    with self._option():
-                        self._token('-')
-                        self.name_last_node('op')
-                    self._error('expecting one of: + -')
-
-        def block0():
-            self._term_()
-            self.name_last_node('args')
-        self._closure(block0, sep=sep0)
+    @graken()
+    def _addition_(self):
+        self._term_()
+        self.name_last_node('lhs')
+        self._token('+')
+        self.name_last_node('op')
+        self._cut()
+        self._aexp_()
+        self.name_last_node('rhs')
         self.ast._define(
-            ['args'],
+            ['lhs', 'op', 'rhs'],
+            []
+        )
+
+    @graken()
+    def _subtraction_(self):
+        self._term_()
+        self.name_last_node('lhs')
+        self._token('-')
+        self.name_last_node('op')
+        self._cut()
+        self._aexp_()
+        self.name_last_node('rhs')
+        self.ast._define(
+            ['lhs', 'op', 'rhs'],
             []
         )
 
     @graken()
     def _term_(self):
+        with self._choice():
+            with self._option():
+                self._mult_()
+            with self._option():
+                self._division_()
+            with self._option():
+                self._factor_()
+            self._error('no available options')
 
-        def sep0():
-            with self._group():
-                with self._choice():
-                    with self._option():
-                        self._token('*')
-                        self.name_last_node('op')
-                    with self._option():
-                        self._token('/')
-                        self.name_last_node('op')
-                    self._error('expecting one of: * /')
-
-        def block0():
-            self._factor_()
-            self.name_last_node('args')
-        self._closure(block0, sep=sep0)
+    @graken()
+    def _mult_(self):
+        self._factor_()
+        self.name_last_node('lhs')
+        self._token('*')
+        self.name_last_node('op')
+        self._cut()
+        self._term_()
+        self.name_last_node('rhs')
         self.ast._define(
-            ['args'],
+            ['lhs', 'op', 'rhs'],
+            []
+        )
+
+    @graken()
+    def _division_(self):
+        self._factor_()
+        self.name_last_node('lhs')
+        self._token('/')
+        self.name_last_node('op')
+        self._cut()
+        self._term_()
+        self.name_last_node('rhs')
+        self.ast._define(
+            ['lhs', 'op', 'rhs'],
             []
         )
 
@@ -385,6 +422,7 @@ class WhileLangParser(Parser):
         self._token('-')
         self._cut()
         self._number_()
+        self.name_last_node('@')
 
     @graken()
     def _atom_(self):
@@ -405,7 +443,7 @@ class WhileLangParser(Parser):
 
     @graken()
     def _INT_(self):
-        self._pattern(r'0[xX][0-9a-fA-F]+|0[0-9]+|[1-9][0-9]*')
+        self._pattern(r'0[xX][0-9a-fA-F]+|[0-9]+')
 
     @graken()
     def _NAME_(self):
@@ -481,7 +519,19 @@ class WhileLangSemantics(object):
     def aexp(self, ast):
         return ast
 
+    def addition(self, ast):
+        return ast
+
+    def subtraction(self, ast):
+        return ast
+
     def term(self, ast):
+        return ast
+
+    def mult(self, ast):
+        return ast
+
+    def division(self, ast):
         return ast
 
     def factor(self, ast):

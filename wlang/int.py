@@ -68,7 +68,7 @@ class Interpreter(wlang.ast.AstVisitor):
         assert False
 
     def visit_BExp (self, node, *args, **kwargs):
-        kids = [self.visit (a, *args, **kwargs) for a in args]
+        kids = [self.visit (a, *args, **kwargs) for a in node.args]
         
         if node.op == 'not':
             assert node.is_unary ()
@@ -135,13 +135,15 @@ class Interpreter(wlang.ast.AstVisitor):
     def visit_WhileStmt (self, node, *args, **kwargs):
         cond = self.visit (node.cond, *args, **kwargs)
         
-        st = self.visit (node.body, *args, **kwargs)
         if cond:
-            nkwargs = dict(kwargs)
-            nkwargs['state'] = st
-            return self.visit (node, *args, **nkwargs)
+            # execute the body
+            st = self.visit (node.body, *args, **kwargs)
+            # execute the loop again
+            kwargs['state'] = st
+            return self.visit (node, *args, **kwargs)
         else:
-            return st
+            # loop condition is false, don't execute the body
+            return kwargs['state']
 
     def visit_AssertStmt (self, node, *args, **kwargs):
         cond = self.visit (node.cond, *args, **kwargs)
@@ -149,7 +151,7 @@ class Interpreter(wlang.ast.AstVisitor):
             assert False, 'Assertion error: ' + str (node)
         return kwargs['state']
     def visit_AssumeStmt (self, node, *args, **kwargs):
-        return visit_AssertStmt (self, node, *args, **kwargs)
+        return self.visit_AssertStmt (self, node, *args, **kwargs)
 
     def visit_StmtList (self, node, *args, **kwargs):
         st = kwargs['state']
@@ -158,6 +160,13 @@ class Interpreter(wlang.ast.AstVisitor):
         for stmt in node.stmts:
             nkwargs ['state'] = st
             st = self.visit (stmt, *args, **nkwargs)
+        return st
+
+    def visit_HavocStmt (self, node, *args, **kwargs):
+        st = kwargs['state']
+        for v in node.vars:
+            ### assign 0 as the default value
+            st.env [v.name] = 0
         return st
         
 def _parse_args ():
