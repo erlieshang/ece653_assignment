@@ -151,7 +151,7 @@ class Interpreter(wlang.ast.AstVisitor):
             assert False, 'Assertion error: ' + str (node)
         return kwargs['state']
     def visit_AssumeStmt (self, node, *args, **kwargs):
-        return self.visit_AssertStmt (self, node, *args, **kwargs)
+        return self.visit_AssertStmt (node, *args, **kwargs)
 
     def visit_StmtList (self, node, *args, **kwargs):
         st = kwargs['state']

@@ -383,7 +383,7 @@ class PrintVisitor (AstVisitor):
         self.visit (node.cond, no_brkt=True)
         self._write (' do')
         self._write ('\n')
-        self._indent (indnet=kwargs['indent'] + 2)
+        self._indent (indent=kwargs['indent'] + 2)
         self.visit (node.body, indent=kwargs['indent'] + 2)
 
         
