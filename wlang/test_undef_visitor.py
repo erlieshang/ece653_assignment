@@ -10,4 +10,16 @@ class TestStatsVisitor (unittest.TestCase):
         uv = undef_visitor.UndefVisitor ()
         uv.check (ast1)
         # UNCOMMENT to run the test
-        ## self.assertEquals (set ([ast.IntVar('z')]), uv.get_undefs ())
+        self.assertEquals (set ([ast.IntVar('z')]), uv.get_undefs ())
+
+    def test_two (self):
+        with open('./wlang/undef_test.prg', 'r') as f:
+            prg = f.read()
+
+        ast1 = ast.parse_string (prg)
+
+        uv = undef_visitor.UndefVisitor ()
+        uv.check (ast1)
+        print(uv.get_undefs())
+        # UNCOMMENT to run the test
+        #self.assertEquals (set ([ast.IntVar('z')]), uv.get_undefs ())

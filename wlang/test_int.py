@@ -41,11 +41,11 @@ class TestInt (unittest.TestCase):
         self.assertEquals (len (st.env), 1)
 
     def test_methods(self):
-        print("test2")
         with open('./wlang/additional_test.prg', 'r') as f:
             prg = f.read()
         # test parser
         ast1 = ast.parse_string(prg)
+        print(ast1)
         interp = wlang.int.Interpreter()
         st = wlang.int.State()
         st = interp.run(ast1, st)

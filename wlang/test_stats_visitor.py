@@ -10,5 +10,15 @@ class TestStatsVisitor (unittest.TestCase):
         sv = stats_visitor.StatsVisitor ()
         sv.visit (ast1)
         # UNCOMMENT to run the test
-        ## self.assertEquals (sv.get_num_stmts (), 2)
-        ## self.assertEquals (sv.get_num_vars (), 1)
+        self.assertEquals (sv.get_num_stmts (), 2)
+        self.assertEquals (sv.get_num_vars (), 1)
+
+    def test_two(self):
+        with open('./wlang/stats_test.prg', 'r') as f:
+            prg = f.read()
+        # test parser
+        ast1 = ast.parse_string(prg)
+        sv = stats_visitor.StatsVisitor()
+        sv.visit(ast1)
+        self.assertEquals(sv.get_num_stmts(), 21)
+        self.assertEquals(sv.get_num_vars(), 3)
