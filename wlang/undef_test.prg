@@ -3,7 +3,7 @@ x := 10;
 y := 128;
 if x < 20 and y > z + 1 then i := x + 1 else i := x * 2;
 if x > 20 or y < 100 then r := x + 1 else x := x * 2;
-if x > w then x := 1;
+if x > 20 then x := w else x := z;
 while z > 17 do {x := x - 1; y := y / 2};
 assume q = 17; 
 assert x = 17; 

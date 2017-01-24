@@ -17,9 +17,9 @@ class TestStatsVisitor (unittest.TestCase):
             prg = f.read()
 
         ast1 = ast.parse_string (prg)
-
         uv = undef_visitor.UndefVisitor ()
-        uv.check (ast1)
+        print(uv.get_undefs())
+        uv.check(ast1)
         print(uv.get_undefs())
         # UNCOMMENT to run the test
-        #self.assertEquals (set ([ast.IntVar('z')]), uv.get_undefs ())
+        self.assertEquals(set([ast.IntVar('z'), ast.IntVar('q'), ast.IntVar('r'), ast.IntVar('w')]), uv.get_undefs())

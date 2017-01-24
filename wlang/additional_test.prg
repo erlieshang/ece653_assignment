@@ -9,5 +9,6 @@ while x > 17 do {x := x - 1; y := y / 2};
 assume x = 17; 
 assert x = 17; 
 if not false then x :=  -1 * 3 - 2; 
+if true then skip;
  assert x = 23;
 print_state
