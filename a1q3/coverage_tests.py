@@ -1,6 +1,9 @@
 import unittest
 from a1q3 import M
 
+def foo(test):
+    return test
+
 class CoverageTests (unittest.TestCase):
     def test_1 (self):
         """run all cases via node 8 to finish node coverage
